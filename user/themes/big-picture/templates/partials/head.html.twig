@@ -37,6 +37,7 @@
     {% do assets.add('theme://assets/js/breakpoints.min.js', {group:'bottom'}) %}
     {% do assets.add('theme://assets/js/util.js', {group:'bottom'}) %}    
     {% do assets.add('theme://assets/js/main.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/mobile-parallax.js', {group:'bottom'}) %}
 {% endblock %}
 
 {{ assets.js()|raw }}
