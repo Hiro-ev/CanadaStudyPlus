@@ -4,92 +4,115 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!isMobile) return;
     
-    // Find all sections with class "info" (city sections)
-    const citySections = document.querySelectorAll('section.info');
+    // Map section IDs to their background images
+    const sectionBackgrounds = {
+        'why': 'one.jpg',
+        'toronto': 'two.jpg',
+        'calgary': 'three.jpg',
+        'vancouver': 'four.jpg',
+        'montreal': 'five.jpg',
+        'aboutus': 'intro.jpg'
+    };
     
-    citySections.forEach(section => {
+    // Process each section
+    Object.entries(sectionBackgrounds).forEach(([sectionId, imageName]) => {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+        
+        // Extract the base URL from existing background if possible
         const computedStyle = window.getComputedStyle(section);
         const bgImage = computedStyle.backgroundImage;
+        let baseUrl = '/user/pages/01.home/';
         
-        // Extract the actual image URL from backgroundImage
+        // Try to extract the actual path from current background
         if (bgImage && bgImage !== 'none') {
-            // Match the last URL in the background-image (actual image, not overlay)
             const urlMatches = bgImage.match(/url\(['"]?([^'"]+?)['"]?\)/g);
             if (urlMatches && urlMatches.length > 0) {
-                // Get the last URL (actual background, not overlay)
                 const lastUrl = urlMatches[urlMatches.length - 1];
-                const imageUrl = lastUrl.match(/url\(['"]?([^'"]+?)['"]?\)/)[1];
-                
-                // Apply fixed background effect
-                section.style.position = 'relative';
-                section.style.backgroundImage = 'none';
-                
-                const parallaxBg = document.createElement('div');
-                parallaxBg.className = 'parallax-bg';
-                parallaxBg.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100vh;
-                    background-image: url('${imageUrl}');
-                    background-size: cover;
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    will-change: transform;
-                    z-index: -1;
-                `;
-                
-                // Create a container for the parallax background
-                const bgContainer = document.createElement('div');
-                bgContainer.className = 'parallax-container';
-                bgContainer.style.cssText = `
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-                    z-index: -1;
-                `;
-                bgContainer.appendChild(parallaxBg);
-                
-                section.insertBefore(bgContainer, section.firstChild);
-                section.dataset.hasParallax = 'true';
+                const currentUrl = lastUrl.match(/url\(['"]?([^'"]+?)['"]?\)/)[1];
+                // Extract base path
+                const pathMatch = currentUrl.match(/(.+\/)([^/]+\.jpg)/);
+                if (pathMatch) {
+                    baseUrl = pathMatch[1];
+                }
             }
         }
+        
+        // Construct the image URL
+        const imageUrl = baseUrl + imageName;
+        
+        // Apply fixed background effect
+        section.style.position = 'relative';
+        section.style.overflow = 'hidden';
+        
+        // Hide original background
+        section.style.backgroundImage = 'none';
+        
+        // Create fixed background element
+        const fixedBg = document.createElement('div');
+        fixedBg.className = 'mobile-fixed-bg';
+        fixedBg.dataset.section = sectionId;
+        fixedBg.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('${imageUrl}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            display: none;
+        `;
+        
+        // Add to body for proper fixed positioning
+        document.body.appendChild(fixedBg);
+        
+        // Mark section as processed
+        section.dataset.mobileParallax = 'true';
     });
     
+    // Update visibility based on scroll
     let ticking = false;
-    let currentVisibleBg = null;
+    let activeBg = null;
     
-    function updateParallax() {
-        const scrolled = window.pageYOffset;
+    function updateBackgrounds() {
         const viewportHeight = window.innerHeight;
+        const scrolled = window.pageYOffset;
         
-        document.querySelectorAll('[data-has-parallax]').forEach(section => {
-            const bgContainer = section.querySelector('.parallax-container');
-            const parallaxBg = section.querySelector('.parallax-bg');
-            if (!parallaxBg || !bgContainer) return;
-            
+        // Find which section is most visible
+        let mostVisibleSection = null;
+        let maxVisibility = 0;
+        
+        document.querySelectorAll('[data-mobile-parallax="true"]').forEach(section => {
             const rect = section.getBoundingClientRect();
             
-            // Check if section is in viewport
-            const isInView = rect.top < viewportHeight && rect.bottom > 0;
-            
-            if (isInView) {
-                // Show this background and hide others
-                if (currentVisibleBg && currentVisibleBg !== parallaxBg) {
-                    currentVisibleBg.style.display = 'none';
-                }
-                parallaxBg.style.display = 'block';
-                currentVisibleBg = parallaxBg;
+            // Calculate how much of the section is visible
+            if (rect.top < viewportHeight && rect.bottom > 0) {
+                const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+                const visibility = visibleHeight / viewportHeight;
                 
-                // Optional: Add slight parallax movement
+                if (visibility > maxVisibility) {
+                    maxVisibility = visibility;
+                    mostVisibleSection = section;
+                }
+            }
+        });
+        
+        // Update background visibility
+        document.querySelectorAll('.mobile-fixed-bg').forEach(bg => {
+            if (mostVisibleSection && bg.dataset.section === mostVisibleSection.id) {
+                bg.style.display = 'block';
+                
+                // Add slight parallax effect
+                const rect = mostVisibleSection.getBoundingClientRect();
                 const scrollPercent = -rect.top / viewportHeight;
-                const parallaxSpeed = 0.3;
-                const yPos = scrollPercent * 100 * parallaxSpeed;
-                parallaxBg.style.transform = `translate3d(0, ${yPos}px, 0)`;
+                const parallaxSpeed = 0.2;
+                const yPos = scrollPercent * 50 * parallaxSpeed;
+                bg.style.transform = `translate3d(0, ${yPos}px, 0) scale(1.1)`;
+            } else {
+                bg.style.display = 'none';
             }
         });
         
@@ -98,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function requestTick() {
         if (!ticking) {
-            window.requestAnimationFrame(updateParallax);
+            window.requestAnimationFrame(updateBackgrounds);
             ticking = true;
         }
     }
@@ -106,5 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', requestTick, { passive: true });
     window.addEventListener('resize', requestTick, { passive: true });
     
-    updateParallax();
+    // Initial update
+    updateBackgrounds();
 });
