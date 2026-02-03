@@ -4,92 +4,92 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!isMobile) return;
     
-    const cityConfigs = {
-        'toronto': {
-            selector: '#toronto',
-            imageUrl: '/user/themes/big-picture/assets/images/toronto-bg.jpg',
-            speed: 0.5
-        },
-        'calgary': {
-            selector: '#calgary',
-            imageUrl: '/user/themes/big-picture/assets/images/calgary-bg.jpg',
-            speed: 0.5
-        },
-        'vancouver': {
-            selector: '#vancouver',
-            imageUrl: '/user/themes/big-picture/assets/images/vancouver-bg.jpg',
-            speed: 0.5
-        },
-        'montreal': {
-            selector: '#montreal',
-            imageUrl: '/user/themes/big-picture/assets/images/montreal-bg.jpg',
-            speed: 0.5
-        }
-    };
+    // Find all sections with class "info" (city sections)
+    const citySections = document.querySelectorAll('section.info');
     
-    Object.entries(cityConfigs).forEach(([city, config]) => {
-        const section = document.querySelector(config.selector);
-        if (!section) return;
-        
+    citySections.forEach(section => {
         const computedStyle = window.getComputedStyle(section);
         const bgImage = computedStyle.backgroundImage;
         
+        // Extract the actual image URL from backgroundImage
         if (bgImage && bgImage !== 'none') {
-            const urlMatch = bgImage.match(/url\(['"]?(.+?)['"]?\)/);
-            if (urlMatch) {
-                config.imageUrl = urlMatch[1];
+            // Match the last URL in the background-image (actual image, not overlay)
+            const urlMatches = bgImage.match(/url\(['"]?([^'"]+?)['"]?\)/g);
+            if (urlMatches && urlMatches.length > 0) {
+                // Get the last URL (actual background, not overlay)
+                const lastUrl = urlMatches[urlMatches.length - 1];
+                const imageUrl = lastUrl.match(/url\(['"]?([^'"]+?)['"]?\)/)[1];
+                
+                // Apply fixed background effect
+                section.style.position = 'relative';
+                section.style.backgroundImage = 'none';
+                
+                const parallaxBg = document.createElement('div');
+                parallaxBg.className = 'parallax-bg';
+                parallaxBg.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100vh;
+                    background-image: url('${imageUrl}');
+                    background-size: cover;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    will-change: transform;
+                    z-index: -1;
+                `;
+                
+                // Create a container for the parallax background
+                const bgContainer = document.createElement('div');
+                bgContainer.className = 'parallax-container';
+                bgContainer.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                    z-index: -1;
+                `;
+                bgContainer.appendChild(parallaxBg);
+                
+                section.insertBefore(bgContainer, section.firstChild);
+                section.dataset.hasParallax = 'true';
             }
         }
-        
-        section.style.position = 'relative';
-        section.style.backgroundImage = 'none';
-        
-        const parallaxBg = document.createElement('div');
-        parallaxBg.className = 'parallax-bg';
-        parallaxBg.style.cssText = `
-            position: absolute;
-            top: -20%;
-            left: 0;
-            width: 100%;
-            height: 120%;
-            background-image: url('${config.imageUrl}');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            will-change: transform;
-            z-index: -1;
-        `;
-        
-        section.insertBefore(parallaxBg, section.firstChild);
-        
-        section.dataset.parallaxCity = city;
-        section.dataset.parallaxSpeed = config.speed;
     });
     
     let ticking = false;
+    let currentVisibleBg = null;
     
     function updateParallax() {
         const scrolled = window.pageYOffset;
         const viewportHeight = window.innerHeight;
         
-        document.querySelectorAll('[data-parallax-city]').forEach(section => {
+        document.querySelectorAll('[data-has-parallax]').forEach(section => {
+            const bgContainer = section.querySelector('.parallax-container');
             const parallaxBg = section.querySelector('.parallax-bg');
-            if (!parallaxBg) return;
+            if (!parallaxBg || !bgContainer) return;
             
             const rect = section.getBoundingClientRect();
-            const sectionTop = rect.top + scrolled;
-            const sectionHeight = rect.height;
-            const speed = parseFloat(section.dataset.parallaxSpeed) || 0.5;
             
-            const isInView = (scrolled + viewportHeight > sectionTop) && 
-                           (scrolled < sectionTop + sectionHeight);
+            // Check if section is in viewport
+            const isInView = rect.top < viewportHeight && rect.bottom > 0;
             
             if (isInView) {
-                const sectionScrolled = scrolled - sectionTop + viewportHeight;
-                const percentage = sectionScrolled / (viewportHeight + sectionHeight);
-                const parallaxOffset = -(percentage * 100 * speed);
+                // Show this background and hide others
+                if (currentVisibleBg && currentVisibleBg !== parallaxBg) {
+                    currentVisibleBg.style.display = 'none';
+                }
+                parallaxBg.style.display = 'block';
+                currentVisibleBg = parallaxBg;
                 
-                parallaxBg.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
+                // Optional: Add slight parallax movement
+                const scrollPercent = -rect.top / viewportHeight;
+                const parallaxSpeed = 0.3;
+                const yPos = scrollPercent * 100 * parallaxSpeed;
+                parallaxBg.style.transform = `translate3d(0, ${yPos}px, 0)`;
             }
         });
         
