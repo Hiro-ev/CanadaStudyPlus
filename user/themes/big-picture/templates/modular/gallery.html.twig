@@ -1,0 +1,32 @@
+{% set thumbWidth = page.header.thumbnail_max_width %}
+{% set thumbHeight = page.header.thumbnail_max_height %}
+
+{% if thumbWidth <= 0 %}
+    {% set thumbWidth = 540 %}
+{% endif %}
+
+{% if thumbHeight <= 0 %}
+    {% set thumbHeight = 540 %}
+{% endif %}
+<section id="{{ page.folder|replace({'_': ''}) }}" class="main style3 primary">
+    <div class="content">
+        <header>
+            <h2>{{ header.heading }}</h2>
+            {{ content|raw }}
+        </header>
+        {% if header.images|length > 0 %}
+        <div class="gallery">
+            {% for image in header.images %}
+            {% set slug = '/home/' ~ image.title|lower|replace({' ': '-', '、': '', '。': ''}) %}
+            <article class="from-{% if loop.index is odd %}left{% else %}right{% endif %}">
+                <a href="{{ slug }}" class="image fit">
+                    <img src="{{ page.media[image.full].cropResize(thumbWidth, thumbHeight).url }}" alt="画像説明" class="image">
+                         <span class="tooltip">リンク先を表示</span>
+                </a>
+                <p>{{ slug }}</p> {# スラッグを明示的に表示 #}
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>

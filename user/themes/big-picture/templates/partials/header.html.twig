@@ -1,0 +1,16 @@
+<header id="header"> 
+    <h1 id="logo"><a href="{{ base_url == '' ? '/' : base_url }}">{{ site.title }}</a></h1>
+    <nav id="nav">
+        <ul>
+            {# title: Home のページの場合、通常のメニューを表示 #}
+            {% if page.header.title == 'Home' %}
+                {% for module in page.collection() %}
+                    <li><a href="#{{ module.folder|replace({'_': ''}) }}">{{ module.menu }}</a></li>
+                {% endfor %}
+            {% else %}
+                {# その他のページでは「Homeに戻る」のみ表示 #}
+                <li><a href="{{ base_url == '' ? '/' : base_url }}">Home</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

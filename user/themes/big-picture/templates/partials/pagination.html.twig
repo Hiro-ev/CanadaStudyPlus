@@ -1,0 +1,25 @@
+<nav class="pagination">
+    {% if pagination %}
+        <ul>
+            {% if pagination.hasPrev %}
+                <li>
+                    <a href="{{ pagination.prevUrl }}" class="page prev">&laquo; Previous</a>
+                </li>
+            {% endif %}
+
+            {% for pageNumber, paginationUrl in pagination.pages %}
+                <li>
+                    <a href="{{ paginationUrl }}" class="page {{ pagination.current == pageNumber ? 'active' : '' }}">
+                        {{ pageNumber }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if pagination.hasNext %}
+                <li>
+                    <a href="{{ pagination.nextUrl }}" class="page next">Next &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</nav>

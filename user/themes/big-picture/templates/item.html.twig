@@ -1,0 +1,128 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+
+<style>
+    .single-photo {
+        text-align: center;
+    }
+    .two-photos {
+        display: flex;
+        justify-content: space-around;
+    }
+    .photo img {
+        max-width: 48%;
+    }
+    .owl-carousel .item img {
+        width: 100%;
+        height: auto;
+    }
+    
+    /* Features Table */
+    .features-table {
+        width: 100%;
+        border-collapse: collapse; /* セルの境界線を結合 */
+        margin-top: 0px; /* テーブルと上のコンテンツにスペースを追加 */
+    }
+
+    .features-table, .features-table th, .features-table td {
+        border: 2px solid black; /* 枠線の色と太さを設定 */
+    }
+
+    .features-table th, .features-table td {
+        padding: 10px; /* セルの内側の余白 */
+        text-align: left; /* テキストを左寄せ */
+    }
+
+    .features-table tr:nth-child(even) {
+        background-color: #f2f2f2; /* 偶数行に背景色をつける */
+    }
+        
+    .exp-heading {
+        margin-top: 20px;
+    }
+
+    
+    /* Duration Table */
+    .duration-table {
+        width: 60%;
+        border-collapse: collapse;
+        margin-top: 0px;
+    }
+
+    .duration-table, .duration-table th, .duration-table td {
+        border: 2px solid #333;
+    }
+
+    .duration-table th, .duration-table td {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .duration-table tr:nth-child(odd) {
+        background-color: #f4f4f4;
+    }
+</style>
+
+<h1>{{ page.title }}</h1>
+
+{% if page.header.photo %}
+    {% set photos = page.media.images %}
+    {% set photo_count = photos|length %}
+    
+    {% if photo_count == 1 %}
+        <!-- 1枚だけの場合 -->
+        <div class="single-photo">
+            <img src="{{ photos|first.resize(500, null).url }}" alt="{{ page.title }}">
+        </div>
+    {% elseif photo_count == 2 %}
+        <!-- 2枚の場合 -->
+        <div class="two-photos">
+            {% for photo in photos %}
+                <div class="photo">
+                    <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- 3枚以上の場合 -->
+        <div class="owl-carousel">
+            {% for photo in photos %}
+                <div class="item">
+                    <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if page.header.features and page.header.description %}
+
+    <!-- Features Table -->
+    <h6 class="exp-heading">{{ page.header.exp1 }}</h6>
+    <table class="features-table">
+        {% for feature in page.header.features %}
+            <tr>
+                <td>{{ feature }}</td>
+                <td>{{ page.header.description[loop.index0] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Duration Table -->
+    <h6 class="exp-heading">{{ page.header.exp2 }}</h6>
+    <table class="duration-table">
+        {% for duration in page.header.duration %}
+            <tr>
+                <td>{{ duration }}</td>
+                <td>{{ page.header.cost1[loop.index0] }}</td>
+                <td>{{ page.header.cost2[loop.index0] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h6>{{ page.header.exp3 }}</h6>
+    
+    <a href="/home/estimate?title={{ page.title|url_encode }}" class="btn">詳細お見積り・お申込み</a>
+
+{% endif %}
+{% endblock %}

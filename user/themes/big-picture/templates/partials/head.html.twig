@@ -1,0 +1,44 @@
+{% block head %}
+<title>{% if header.title %}{{ header.title }} {% else %} {{ site.title }} {% endif %}</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+{% for meta in page.metadata %}
+    {% if meta.name != 'generator' %}
+    <meta {% if meta.name %}name="{{ meta.name }}" {% endif %}{% if meta.http_equiv %}http-equiv="{{ meta.http_equiv }}" {% endif %}{% if meta.charset %}charset="{{ meta.charset }}" {% endif %}{% if meta.property %}property="{{ meta.property }}" {% endif %}{% if meta.content %}content="{{ meta.content }}" {% endif %}/>
+    {% endif %}
+{% endfor %}
+
+{% set favicon = 'favicon.png' %}
+{% if theme_config.favicon|length > 0 %}
+    {% for icon in theme_config.favicon %}
+        {% set favicon = icon.name %}
+    {% endfor %}
+{% endif %}
+
+<link rel="icon" href="{{ url('theme://images/' ~ favicon, true) }}" />
+
+{% block stylesheets %}
+    {% do assets.add('theme://assets/css/main.css') %}
+    {% do assets.add('theme://assets/css/mobile-fix.css') %}
+    <noscript>
+        {% do assets.add('theme://assets/css/noscript.css') %}
+    </noscript>
+{% endblock %}
+
+{{ assets.css()|raw }}
+
+{% block javascripts %}
+    {% do assets.addJs('jquery', 101) %}
+    {% do assets.add('theme://assets/js/jquery.poptrox.min.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/jquery.scrolly.min.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/jquery.scrollex.min.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/browser.min.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/breakpoints.min.js', {group:'bottom'}) %}
+    {% do assets.add('theme://assets/js/util.js', {group:'bottom'}) %}    
+    {% do assets.add('theme://assets/js/main.js', {group:'bottom'}) %}
+{% endblock %}
+
+{{ assets.js()|raw }}
+
+{% endblock head %}

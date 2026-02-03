@@ -1,0 +1,111 @@
+/*
+	Custom by Hiro
+*/
+.school-item {
+    border: 2px solid black; /* 枠線の色と太さ */
+    border-radius: 10px; /* 角を丸める（必要に応じて） */
+    padding: 20px; /* 内容と枠線の間の余白 */
+    margin: 10px 0; /* 各学校間の上下マージン */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 見た目を良くするシャドウ */
+}
+
+.school-content img {
+    max-width: 100%; /* 画像を枠内に収める */
+    height: 280px; /* auto; アスペクト比を維持 */
+    object-fit: cover; /* 画像を枠内に収める方法を指定 */
+    display: block; /* 画像をブロック要素として表示 */
+    margin-bottom: 10px; /* 画像下に余白 */
+    border-radius: 10px; /* 必要に応じて画像の角を丸める */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 画像にシャドウを追加 */
+}
+
+.school-item h2 {
+    font-size: 1.5em; /* タイトルのフォントサイズ */
+    margin-bottom: 10px; /* タイトル下の余白 */
+}
+
+.school-item ul {
+    padding-left: 20px; /* リストの左余白 */
+    list-style-type: disc; /* ディスク型のリストアイコン */
+}
+
+.school-item ul li {
+    margin-bottom: 5px; /* 各リスト項目の間隔 */
+}
+
+.image-link {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    visibility: hidden;  /* 初期状態では非表示 */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-link:hover .tooltip {
+    visibility: visible;  /* ホバー時に表示 */
+    opacity: 1;
+}
+
+body.custom-bg-color {
+    background-color: #f0f0f0; /* 任意の色コード */
+}
+
+.blog-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.blog-post {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.blog-post h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.blog-summary {
+    margin: 10px 0;
+    color: #666;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.read-more:hover {
+    background-color: #0056b3;
+}
+
+#about-us table {
+  display: table !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  border-collapse: collapse !important;
+  width: 100%;
+}
+
+#about-us td, #about-us th {
+  text-align: center !important;
+}

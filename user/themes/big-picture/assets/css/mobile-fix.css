@@ -1,0 +1,34 @@
+/* Mobile Background Fixed Alternative */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  .intro,
+  .info {
+    background-attachment: scroll !important;
+    position: relative;
+  }
+  
+  /* Create fixed background effect using pseudo-element */
+  .intro::before,
+  .info::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center center;
+    z-index: -1;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* Alternative: Disable fixed background on all touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .intro,
+  .info {
+    background-attachment: scroll !important;
+  }
+}

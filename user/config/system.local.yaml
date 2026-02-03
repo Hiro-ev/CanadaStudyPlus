@@ -1,0 +1,7 @@
+errors:
+  display: 0                    # 0 = エラー非表示, 1 = 簡易表示, -1 = 全て表示
+  log: true                      # エラーをログに記録
+debugger:
+  enabled: false                 # デバッガーを無効化
+  shutdown:
+    close_connection: true       # 接続を閉じる

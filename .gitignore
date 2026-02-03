@@ -1,0 +1,35 @@
+# Grav specific
+/cache/*
+!/cache/index.html
+/logs/*
+!/logs/index.html
+/tmp/*
+!/tmp/index.html
+/backup/*
+!/backup/index.html
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (if any)
+node_modules/
+
+# Environment files
+.env
+.env.local
+
+# FTP credentials (backup)
+ftp-config.txt

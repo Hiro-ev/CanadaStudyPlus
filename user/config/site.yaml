@@ -1,0 +1,24 @@
+title: 'Canada Study Plus'
+default_lang: ja
+author:
+  name: null
+  email: null
+taxonomies:
+  - category
+  - tag
+metadata:
+  description: 'カナダ留学経験者によるカナダに特化した留学・ワーホリをご提案。カナダでは20年2万名以上のサポート実績あり'
+  'og:title': 'Canada Study Plus - カナダ留学・ワーホリのエキスパート'
+  'og:type': 'website'
+  'og:url': 'https://canadastudyplus.com'
+  'og:image': 'https://canadastudyplus.com/images/og-image.jpg'
+  'og:site_name': 'Canada Study Plus'
+summary:
+  enabled: true
+  format: short
+  size: 300
+  delimiter: '==='
+redirects: null
+routes: null
+blog:
+  route: /blog

@@ -1,0 +1,18 @@
+state: enabled
+email: k@aware.style
+fullname: 'kenny A'
+title: Administrator
+hashed_password: $2y$10$/LrpZKzS9b.Ker5Ds2g55eQynbDOFfEUncWSUBf6rkQtSa5bF5nLi
+language: ja
+content_editor: default
+twofa_enabled: false
+twofa_secret: 73QC3FPI2YH7DYGCN6WCS5SM5JK4YE5C
+groups:
+  - admin
+avatar: {  }
+access:
+  site:
+    login: true
+  admin:
+    login: true
+    super: true

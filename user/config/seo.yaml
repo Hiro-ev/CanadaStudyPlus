@@ -1,0 +1,22 @@
+# SEO Configuration for Canada Study Plus
+metadata:
+  keywords: 'カナダ留学,カルガリー留学,トロント留学,バンクーバー留学,ワーホリ,ワーキングホリデー,語学学校,カナダビザ,留学エージェント'
+  author: 'Canada Study Plus'
+  robots: 'index, follow, max-image-preview:large'
+  
+# Structured Data
+structured_data:
+  "@context": "https://schema.org"
+  "@type": "EducationalOrganization"
+  name: "Canada Study Plus"
+  url: "https://canadastudyplus.com"
+  logo: "https://canadastudyplus.com/images/logo.png"
+  description: "カナダ留学経験者によるカナダに特化した留学・ワーホリをご提案"
+  address:
+    "@type": "PostalAddress"
+    addressCountry: "CA"
+  
+# Multi-language Support
+lang_alternate:
+  ja: "https://canadastudyplus.com"
+  en: "https://canadastudyplus.com/en"

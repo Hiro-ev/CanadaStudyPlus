@@ -1,0 +1,57 @@
+{% set theme_config = attribute(config.themes, 'big-picture') %}
+
+<!DOCTYPE HTML>
+<html lang="{{ grav.language.getActive ?: theme_config.default_lang }}">
+    <head prefix="og: http://ogp.me/ns#">
+        {% include 'partials/head.html.twig' %}
+        <link rel="stylesheet" href="/user/plugins/shortcode-owl-carousel/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="/user/plugins/shortcode-owl-carousel/css/owl.theme.default.min.css">
+        
+        <meta property="og:title" content="{{ page.title ?: site.title }}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ page.url(true, true) }}">
+        <meta property="og:description" content="{{ page.header.metadata.description ?: site.metadata.description }}">
+        <meta property="og:image" content="{{ page.header.metadata.og_image ?: theme_url ~ '/images/og-image.jpg' }}">
+        <meta property="og:site_name" content="{{ site.title }}">
+        
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ page.title ?: site.title }}">
+        <meta name="twitter:description" content="{{ page.header.metadata.description ?: site.metadata.description }}">
+        <meta name="twitter:image" content="{{ page.header.metadata.og_image ?: theme_url ~ '/images/og-image.jpg' }}">
+    </head>
+    <body class="is-preload">
+        {% include 'partials/header.html.twig' %}
+
+        {% block content %}{% endblock %}
+
+        {% include 'partials/footer.html.twig' %}
+
+        {% block bottom %}
+            {{ assets.js('bottom')|raw }}
+        {% endblock %}
+    </body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            items: 2,  // 1回の表示で2枚の画像を表示
+            slideBy: 1, // 1回のスライドで1枚ずつ進める
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                }
+            },
+            nav: false // ナビゲーションボタンを非表示にする
+        });
+    });
+</script>
+<script src="/user/plugins/shortcode-owl-carousel/js/owl.carousel.min.js"></script>

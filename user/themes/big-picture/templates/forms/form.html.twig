@@ -1,0 +1,15 @@
+{% extends "forms/default/form.html.twig" %}
+
+{% block inner_markup_field_open %}
+  {% if field.name == 'name' %}
+  <div class="field half">
+  {% elseif field.name == 'email' %}
+  <div class="field half">
+  {% else %}
+  <div class="field">
+  {% endif %}
+{% endblock %}
+
+{% block inner_markup_field_close %}
+  </div>
+{% endblock %}

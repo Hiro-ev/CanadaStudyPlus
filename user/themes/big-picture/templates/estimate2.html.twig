@@ -1,0 +1,695 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<h1>詳細お見積りフォーム</h1>
+
+<p>カナダホームステイをご検討いただき誠にありがとうございます。<br>
+カナダでは20年以上、2万名以上の実績があり圧倒的な価格でご提供しております。多くの現地語学学校からも手配依頼を受けておりますが、直接のご契約が圧倒的にお安くお得！＋特別なサポートも付いています。<br>
+他社で学校をお申込みになられた方、長期滞在の方、どなたでもウェルカムです。<br>
+フォームへの入力が済みましたら、確認ボタンを押してください。<br>
+必須マーク（<span style="color: red;">*</span>）のある項目は必ずご入力ください。<br>
+----------------------------------------<br></p>
+
+<form action="{{ base_url_relative }}/form" method="post">
+
+    <fieldset>
+        <legend>ホームステイ</legend>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>エリア:</label>
+            <input
+                type="text" 
+                id="school" 
+                name="school" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="エリア" 
+                value="{{ uri.query('title')|default('') }}" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>ステイ期間（週間）:</label>
+            <input 
+                type="number" 
+                id="homestay_duration_w" 
+                name="homestay_duration_w" 
+                maxlength="2" 
+                size="2" 
+                class="duration-input" 
+                pattern="\d{1,2}" 
+                title="2桁以内の数字を入力してください" 
+                required><label>＋（日数）:</label>
+            <input 
+                type="number" 
+                id="homestay_duration_d" 
+                name="homestay_duration_d" 
+                maxlength="1" 
+                size="1" 
+                class="duration-input" 
+                pattern="\d{1}" 
+                title="0～6の数字を入力してください" 
+                required>
+        </div><br>
+        <label>費用の目安は$280～/週、$55～/日です（空き状況、エリアで変動）</label>
+        <div class="box-wrapper">
+            <label>  <span style="color: red;">*</span>ステイ開始希望日:</label>
+            <input 
+                type="date" 
+                id="homestay_start_date" 
+                name="homestay_start_date" 
+                class="date-input" 
+                pattern="\d{4}/\d{2}/\d{2}" 
+                placeholder="YYYY/MM/DD" 
+                required 
+                oninput="formatDate(this)">
+        </div><br>
+        
+        <div class="box-wrapper">
+            <label>  <span style="color: red;">*</span>お部屋タイプ:</label>
+            <input type="radio" name="room" value="share" required> 相部屋（同性のみ）
+            <input type="radio" name="room" value="private" required> 個室(+$25/週)
+        </div><br>
+        
+        <div class="box-wrapper">
+            <label>  <span style="color: red;">*</span>お食事タイプ:</label>
+            <input type="radio" name="meal" value="halfboard" required> 2食(朝・夕)
+            <input type="radio" name="meal" value="fullboard" required> 3食(+$25/週)
+        </div><br>
+        
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>専用浴室を希望:</label>
+            <input type="radio" name="privatebath" value="yes" required> はい(+$35～/週)
+            <input type="radio" name="privatebath" value="no" required> いいえ
+        </div><br>
+        
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>特別食（グルテンフリー、ビーガン等）を希望:</label>
+            <input type="radio" name="diet" value="yes" required> はい(+$65～/週)
+            <input type="radio" name="diet" value="no" required> いいえ
+        </div><br>
+        
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>渡航時空港ピックアップを希望:</label>
+            <input type="radio" name="airportpick" value="yes" required> はい(+$150)
+            <input type="radio" name="airportpick" value="no" required> いいえ
+        </div><br>
+
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>帰国時空港ドロップオフを希望:</label>
+            <input type="radio" name="airportdrop" value="yes" required> はい(+$120)
+            <input type="radio" name="airportdrop" value="no" required> いいえ
+        </div><br>
+
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>アレルギーはお持ちでしょうか？:</label>
+            <input type="radio" name="allergy" value="yes" required> はい
+            <input type="radio" name="allergy" value="no" required> いいえ
+        </div>
+    
+        <div id="allergy-details" style="display: none;">
+            <div class="box-wrapper">
+                <label>アレルギーの詳細:</label>
+                <input 
+                    type="text" 
+                    id="allergy_details" 
+                    name="allergy_details" 
+                    maxlength="60" 
+                    size="60" 
+                    class="mail-input" 
+                    title="アレルギーについて" 
+                    required>
+            </div><br>
+        </div>
+
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>医療関係の告知事項はありますか？:</label>
+            <input type="radio" name="medical" value="yes" required> はい
+            <input type="radio" name="medical" value="no" required> いいえ
+        </div>
+    
+        <div id="medical-details" style="display: none;">
+            <div class="box-wrapper">
+                <label>告知事項の詳細:</label>
+                <input 
+                    type="text" 
+                    id="medical_details" 
+                    name="medical_details" 
+                    maxlength="60" 
+                    size="60" 
+                    class="mail-input" 
+                    title="医師の治療、投薬を受けている場合はその内容をご記入ください。" 
+                    required>
+            </div><br>
+        </div>
+        
+        <div class="box-wrapper">
+            <label>  その他:</label>
+            <input 
+                type="text" 
+                id="homestay_details" 
+                name="homestay_details" 
+                maxlength="50" 
+                size="50" 
+                class="address-input" 
+                title="ホスト要望、ペットの可否、必要な配慮等ありましたらご記入ください" >
+    </fieldset>
+    
+    <fieldset>
+        <legend><br>お客様情報</legend>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>姓（　漢字　）:</label>
+            <input 
+                type="text" 
+                id="last_name_kanji" 
+                name="last_name_kanji" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="姓（漢字）" 
+                required>
+            <label><span style="color: red;">*</span>名（　漢字　）:</label>
+            <input 
+                type="text" 
+                id="first_name_kanji" 
+                name="first_name_kanji" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="名（漢字）" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>姓（ローマ字）:</label>
+            <input 
+                type="text" 
+                id="last_name_romaji" 
+                name="last_name_romaji" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="姓（ローマ字）" 
+                required>
+            <label><span style="color: red;">*</span>名（ローマ字）:</label>
+            <input 
+                type="text" 
+                id="first_name_romaji" 
+                name="first_name_romaji" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="名（ローマ字）" 
+                required>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>性別:</label>
+            <input type="radio" name="gender" value="male" required> 男性
+            <input type="radio" name="gender" value="female" required> 女性
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>生年月日:</label>
+            <input 
+                type="date" 
+                id="birth_date" 
+                name="birth_date" 
+                class="date-input" 
+                pattern="\d{4}/\d{2}/\d{2}" 
+                placeholder="YYYY/MM/DD" 
+                required 
+                oninput="formatDate(this)">
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>年齢（出発日時点）:</label>
+            <input 
+                type="number" 
+                id="age" 
+                name="age" 
+                maxlength="2" 
+                size="2" 
+                class="duration-input" 
+                pattern="\d{2}" 
+                title="2桁の数字を入力してください" 
+                required>
+            <label>※18歳未満は要ガーディアンシップ登録</label>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label>ご職業:</label>
+            <input 
+                type="text" 
+                id="occupation" 
+                name="occupation" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="ご職業">
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>国籍:</label>
+            <input 
+                type="text" 
+                id="nationality" 
+                name="nationality" 
+                maxlength="10" 
+                size="10" 
+                class="name-input" 
+                title="国籍" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend><br>ご住所</legend>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>都道府県:</label>
+            <input 
+                type="text" 
+                id="address_prefecture" 
+                name="address_prefecture" 
+                maxlength="10" 
+                size="10" 
+                class="name-input" 
+                title="都道府県" 
+                required>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>市区町村:</label>
+            <input 
+                type="text" 
+                id="address_city" 
+                name="address_city" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="市区町村" 
+                required>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>番地以降:</label>
+            <input 
+                type="text" 
+                id="address_details" 
+                name="address_details" 
+                maxlength="50" 
+                size="50" 
+                class="address-input" 
+                title="番地、建物名、お部屋番号等" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>お電話番号:</label>
+            <input 
+            type="text" 
+            id="phone_number" 
+            name="phone_number" 
+            maxlength="20" 
+            size="20" 
+            class="name-input" 
+            title="お電話番号" 
+            required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>メールアドレス:</label>
+            <input 
+            type="text" 
+            id="email" 
+            name="email" 
+            maxlength="40" 
+            size="40" 
+            class="mail-input" 
+            title="メールアドレス" 
+            required>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend><br>渡航関係</legend>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>旅券（パスポート）はお持ちでしょうか？:</label>
+            <input type="radio" name="passport" value="yes" required> はい
+            <input type="radio" name="passport" value="no" required> いいえ
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div id="passport-details" style="display: none;">
+            <div class="box-wrapper">
+                <label><span style="color: red;">*</span>旅券番号:</label>
+                <input 
+                    type="text" 
+                    id="passport_no" 
+                    name="passport_no" 
+                    maxlength="9" 
+                    size="9" 
+                    class="name-input" 
+                    pattern="\d{9}" 
+                    title="9桁の旅券番号を入力してください" 
+                    required>
+            </div><br>
+            <div class="box-wrapper">
+                <label><span style="color: red;">*</span>発行年月日:</label>
+                <input 
+                    type="date" 
+                    id="pp_issue_date" 
+                    name="pp_issue_date" 
+                    class="date-input" 
+                    pattern="\d{4}/\d{2}/\d{2}" 
+                    placeholder="YYYY/MM/DD" 
+                    required 
+                    oninput="formatDate(this)">
+            </div><br>
+            <div class="box-wrapper">
+                <label><span style="color: red;">*</span>有効期限満了日:</label>
+                <input 
+                    type="date" 
+                    id="pp_exp_date" 
+                    name="pp_exp_date" 
+                    class="date-input" 
+                    pattern="\d{4}/\d{2}/\d{2}" 
+                    placeholder="YYYY/MM/DD" 
+                    required 
+                    oninput="formatDate(this)">
+            </div><br>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>カナダ電子渡航認証(eTA)はお持ちでしょうか？:</label>
+            <input type="radio" name="eta" value="yes" required> はい
+            <input type="radio" name="eta" value="no" required> いいえ
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div id="eta-details" style="display: none;">
+            <div class="box-wrapper">
+                <label><span style="color: red;">*</span>代理申請希望しますか？:</label>
+                <input type="radio" name="eta_proxy" value="yes" required> はい
+                <input type="radio" name="eta_proxy" value="no" required> いいえ
+            </div><br>
+            <label>※実費の他に登録代行料として4,400円（税込）が別途必要となります。</label>
+        </div>
+    </fieldset>
+    
+
+    <fieldset>
+        <legend><br>緊急時国内ご連絡先</legend>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>姓（漢字）:</label>
+            <input 
+                type="text" 
+                id="last_name_kanji_alt" 
+                name="last_name_kanji_alt" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="姓（漢字）" 
+                required>
+            <label><span style="color: red;">*</span>名（漢字）:</label>
+            <input 
+                type="text" 
+                id="first_name_kanji_alt" 
+                name="first_name_kanji_alt" 
+                maxlength="20" 
+                size="20" 
+                class="name-input" 
+                title="名（漢字）" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>お電話番号:</label>
+            <input 
+            type="text" 
+            id="phone_number_alt" 
+            name="phone_number_alt" 
+            maxlength="20" 
+            size="20" 
+            class="name-input" 
+            title="お電話番号" 
+            required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>メールアドレス:</label>
+            <input 
+                type="text" 
+                id="email_alt" 
+                name="email_alt" 
+                maxlength="40" 
+                size="40" 
+                class="name-input" 
+                title="メールアドレス" 
+                required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span>お申込み者とのご関係:</label>
+            <input 
+                type="text" 
+                id="relationship" 
+                name="relationship" 
+                maxlength="20" 
+                size="20" 
+                class="mail-input" 
+                title="ご関係" 
+            required>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend><br>その他</legend>
+        <textarea name="additional_comments" rows="2" title="ご希望のエリア詳細などその他なんでも"></textarea>
+    </fieldset><br>
+
+    <fieldset>
+        <div class="box-wrapper">
+            <label><span style="color: red;">*</span><a href="{{ base_url_absolute }}/home/terms" target="_blank">ガイドライン・プライバシーポリシー</a>について同意します</label>
+            <input type="radio" name="privacypolicy" value="yes" required>
+        </div>
+    </fieldset><br>
+
+    <button type="submit">ご確認</button>
+    {{ form_nonce_field('form', 'form-nonce') }}
+</form>
+
+<script>
+    document.querySelectorAll('input[name="passport"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const passportDetails = document.getElementById('passport-details');
+            if (this.value === 'yes') {
+                passportDetails.style.display = 'block';
+            } else {
+                passportDetails.style.display = 'none';
+            }
+        });
+    });
+    
+    document.querySelectorAll('input[name="eta"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const etaDetails = document.getElementById('eta-details');
+            if (this.value === 'no') {
+                etaDetails.style.display = 'block';
+            } else {
+                etaDetails.style.display = 'none';
+            }
+        });
+    });
+    
+    document.querySelectorAll('input[name="allergy"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const allergyDetails = document.getElementById('allergy-details');
+            if (this.value === 'yes') {
+                allergyDetails.style.display = 'block';
+            } else {
+                allergyDetails.style.display = 'none';
+            }
+        });
+    });
+    
+    document.querySelectorAll('input[name="medical"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const medicalDetails = document.getElementById('medical-details');
+            if (this.value === 'yes') {
+                medicalDetails.style.display = 'block';
+            } else {
+                medicalDetails.style.display = 'none';
+            }
+        });
+    });
+    
+    document.querySelectorAll('input, textarea, select').forEach(input => {
+        input.addEventListener('invalid', function () {
+            this.setCustomValidity('');
+            if (!this.validity.valid) {
+                this.setCustomValidity('こちらの項目は必須です。入力してください。');
+            }
+        });
+
+        input.addEventListener('input', function () {
+            this.setCustomValidity('');
+        });
+    });
+    
+</script>
+
+<style>
+
+  fieldset {
+    display: block;
+    visibility: visible;
+  }
+
+  .box-wrapper {
+    display: inline-flex; /* インラインで要素を並べる */
+    align-items: center; /* 縦の中央揃え */
+    gap: 10px; /* テキストボックスとラベルの間に余白を設定 */
+    visibility: visible;
+  }
+
+  .duration-input {
+    -webkit-appearance: none; /* デフォルトのスタイルをリセット（Safariなど） */
+    -moz-appearance: textfield; /* デフォルトのスタイルをリセット（Firefox） */
+    appearance: none; /* 共通リセット */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    width: 50px !important;
+    text-align: right;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .date-input {
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 16px;
+    width: auto;
+    height: 28px;
+    transition: all 0.3s ease;
+  }
+  
+  input[type="radio"] {
+    background-color: #e0f7e0 !important;  /* 薄い緑色 */
+    border: 2px solid #4caf50 !important;  /* 緑色のボーダー */
+    padding: 5px !important;  /* 余白 */
+    border-radius: 50% !important;  /* 丸い形に */
+    display: inline-block !important; /* ラジオボタンをインラインで表示 */
+    visibility: visible !important;   /* ラジオボタンが表示されるように設定 */
+    opacity: 1 !important;            /* ラジオボタンが透明でないように設定 */
+  }
+  
+  /* ラジオボタンが選択された場合 */
+  input[type="radio"]:checked {
+    background-color: #66bb6a !important;  /* チェックされた時の背景色 */
+    border-color: #388e3c !important;  /* チェック時のボーダーカラー */
+  }
+  
+  /* ラジオボタンの選択印（内部の丸い印）のスタイル */
+  input[type="radio"]:checked::before {
+    content: '' !important;  /* 空の内容を追加 */
+    position: absolute !important;
+    top: 4px !important;
+    left: 4px !important;
+    width: 10px !important;   /* チェックマークのサイズ */
+    height: 10px !important;
+    background-color: white !important;  /* チェックマークの色 */
+    border-radius: 50% !important;  /* 丸いチェックマーク */
+  }
+  
+  /* ラジオボタンのホバー時のスタイル（オプション） */
+  input[type="radio"]:hover {
+    border-color: #80e27e !important;
+  }
+  
+  #homestay-details {
+        margin-left: 20px;
+  }
+  
+  .name-input {
+    width: 200px !important;
+    text-align: left;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .address-input {
+    width: 500px !important;
+    text-align: left;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .mail-input {
+    width: 400px !important;
+    text-align: left;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  #passport-details {
+        margin-left: 20px;
+  }
+
+  #eta-details {
+        margin-left: 20px;
+  }
+  
+  #allergy-details {
+        margin-left: 20px;
+  }
+  
+  #medical-details {
+        margin-left: 20px;
+  }
+  
+  input[type="checkbox"] {
+    display: inline-block !important;
+    visibility: visible !important;
+    width: auto;
+    height: auto;
+  }
+  
+</style>
+
+{% endblock %}

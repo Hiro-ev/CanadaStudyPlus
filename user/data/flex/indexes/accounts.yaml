@@ -1,0 +1,14 @@
+version: '1.2'
+timestamp: 1737523632
+count: 2
+index:
+  hiro:
+    storage_key: hiro
+    storage_timestamp: 1737440309
+    key: hiro
+    email: hiro@aware.style
+  kenny:
+    storage_key: kenny
+    storage_timestamp: 1737440310
+    key: kenny
+    email: k@aware.style

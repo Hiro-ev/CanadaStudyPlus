@@ -1,0 +1,90 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="blog-post" style="padding-left: 20px; background-color: #f0f0f0;">
+
+    <style>
+        h2 {
+            font-size: 2rem !important;
+            margin-bottom: 10px !important;
+            color: #003366 !important;
+            display: inline; /* インライン表示 */
+            margin-right: 15px; /* タイトルと日付の間にスペース */
+        }
+        .blog-date {
+            font-size: 1rem !important;
+            color: #888 !important;
+            margin-bottom: 15px !important;
+            display: inline; /* インライン表示 */
+        }
+
+        .blog-content {
+            font-size: 1.2rem !important;
+            line-height: 1.6 !important;
+            color: #555 !important;
+        }
+
+        .next-post-link {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #003366;
+        }
+
+        .image-wrapper {
+            text-align: left;
+        }
+
+        .two-images {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* 画像間のスペース */
+        }
+
+        .two-images img {
+            max-width: 48%; /* 2枚並べたときの幅 */
+            height: auto;
+        }
+
+        .owl-carousel .item img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <h2>{{ page.title }}</h2>
+    <p class="blog-date">{{ page.date|date('Y/m/d') }}</p>
+    
+    {% if page.media.images|length == 1 %}
+        <div class="image-wrapper">
+            {% for photo in page.media.images %}
+                <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+            {% endfor %}
+        </div>
+    {% elseif page.media.images|length == 2 %}
+        <div class="two-images">
+            {% for photo in page.media.images %}
+                <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+            {% endfor %}
+        </div>
+    {% elseif page.media.images|length > 2 %}
+        <div class="owl-carousel">
+            {% for photo in page.media.images %}
+                <div class="item">
+                    <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="blog-content">
+        {{ page.content|raw }}
+    </div>
+
+    {% if page.header.before %}
+        <div class="next-post-link">
+            <a href="https://canadastudyplus.com/home/blog/{{ page.header.before }}">前の記事: {{ page.header.before }}</a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

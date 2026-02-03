@@ -1,0 +1,10 @@
+enabled: true
+footer_icons:
+  -
+    icon: null
+    link: null
+footer_items:
+  -
+    item: Copyright © aware inc. Reserved.
+favicon: {  }
+error_background_image: {  }

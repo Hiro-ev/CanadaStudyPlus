@@ -1,0 +1,123 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+
+
+<div class="blog-container">
+
+    <style>
+        .page-title {
+            margin-top: 20px;
+        }
+        .blog-container {
+            margin-top: 20px !important;
+            margin-left: 20px !important;
+            margin-right: 20px !important;
+            padding-left: 20px !important;
+            background-color: #f0f0f0;
+        }
+        .blog-title {
+            display: inline-block;
+            font-size: 2rem;
+            margin-right: 10px;
+            margin-bottom: 0px !important;
+        }
+        .blog-container h1 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+        }
+        .blog-container p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        .blog-post h2 a {
+            font-size: 1.5rem;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .blog-post h2 a:hover {
+            text-decoration: underline;
+        }
+        .blog-date {
+            display: inline-block;
+            font-size: 0.9rem;
+            color: #999;
+        }
+        .blog-summary {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-top: 0 !important;
+        }
+        /*
+        button {
+            padding: 2px 10px;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            height: auto;
+        } */
+        .read-more {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .read-more:hover {
+            color: #003d82;
+            text-decoration: underline;
+        }
+    </style>
+
+    {# <h1 class="page-title">{{ page.title }}</h1> #}
+    <h1 class="page-title">Blog from Canada</h1>
+    <p>
+        {{ page.content|raw }}
+        <!--
+        <form method="get" action="{{ base_url }}/blog" style="display: flex; align-items: left;">
+            <select id="tag-select" name="tag" style="height: 40px; font-size: 0.8rem; color: #666; width: 200px; margin-right: 10px;">
+            
+                <option value="" style="font-size: 1rem; color: #666;">-- タグで検索 --</option>
+                {% for tag in grav.taxonomy.getTags('blog') %}
+                    <option value="{{ tag }}" {% if url.param('tag') == tag %}selected{% endif %} style="font-size: 1rem; color: #666;">{{ tag }}</option>
+                {% endfor %}
+            /*
+            <option value="">-- タグを選択 --</option>
+            <option value="food" {% if url.param('tag') == 'food' %}selected{% endif %}>food</option>
+            <option value="life" {% if url.param('tag') == 'life' %}selected{% endif %}>life</option>
+            <option value="highschool" {% if url.param('tag') == 'highschool' %}selected{% endif %}>highschool</option>
+            <option value="study" {% if url.param('tag') == 'study' %}selected{% endif %}>study</option>
+            <option value="visa" {% if url.param('tag') == 'visa' %}selected{% endif %}>visa</option>
+            </select>
+            <button type="submit">検索</button>
+        </form>
+        -->
+    </p>
+    
+    <div class="blog-posts">
+        {% set tag_filter = url.param('tag') %}
+        {% for child in page.collection %}
+            {% if tag_filter is empty or tag_filter in child.taxonomy.tags %}
+                <div class="blog-post">
+                    <h2 class="blog-title">
+                        <a href="{{ child.url }}">{{ child.title }}</a>
+                    </h2>
+                    <p class="blog-date">{{ child.date|date('Y/m/d') }}</p>
+                    {% set first_image = child.media.images|first %}
+                    <p class="blog-image">
+                    {% if first_image %}
+                        <a href="{{ child.url }}">
+                            <img src="{{ first_image.cropZoom(200, 200).url }}" alt="{{ child.title }}" />
+                        </a>
+                    {% endif %}
+                    <a class="read-more" href="{{ child.url }}">Read More</a>
+                    </p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    <div class="pagination">
+        {% include 'partials/pagination.html.twig' %}
+    </div>
+</div>
+{% endblock %}

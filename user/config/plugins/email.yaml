@@ -1,0 +1,19 @@
+enabled: true
+from: hiro@aware.style
+to: hiro@aware.style
+mailer:
+  engine: sendmail
+  smtp:
+    server: sv16096.xserver.jp
+    port: 465
+    encryption: ssl
+    user: hiro@aware.style
+    password: hUmqM9g4JB
+  sendmail:
+    bin: '/usr/sbin/sendmail -bs'
+content_type: text/plain
+debug: false
+cc: hiro@aware.style
+bcc: hiro@aware.style
+reply_to: hiro@aware.style
+body: Test

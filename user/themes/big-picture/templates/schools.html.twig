@@ -1,0 +1,195 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+
+<style>
+    .single-photo {
+        text-align: center;
+    }
+    
+    .two-photos {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .two-photos .photo img {
+        max-width: 48%; /* 横並びに収める */
+    }
+    .owl-carousel .item img {
+        width: 100%;
+        height: auto;
+    }
+
+    .school-list {
+        display: block;  /* 横並びを解除して縦並びにします */
+        align-items: center; /* 子要素を中央揃え */
+        margin: 0 auto;
+    }
+
+    .school-item {
+        width: 95%; /* 幅を設定 */
+        margin: 8px auto;  /* 各学校を中央に配置 */
+        padding: 8px;
+        border: 2px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .school-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .exp-heading {
+        margin-top: 20px;
+    }
+
+
+    /* Features Table */
+    .features-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .features-table th, .features-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .features-table th {
+        background-color: #ffd700; /* タイトル行の色を設定 */
+    }
+
+    .features-table tr:nth-child(odd) {
+        background-color: #f2f2f2; /* 奇数行に背景色をつける */
+    }
+
+    /* Duration Table */
+    .duration-table {
+        width: 90%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+     .duration-table, .duration-table th, .duration-table td {
+        border: 2px solid #333;
+    }
+
+    .duration-table th, .duration-table td {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .duration-table th {
+        background-color: #ffd700; /* タイトル行の色を設定 */
+    }
+
+    .duration-table tr:nth-child(odd) {
+        background-color: #f2f2f2; /* 奇数行に背景色をつける */
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        background-color: #007BFF;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+
+<div class="school-list">
+    {% for school in page.children.visible %}
+        <div class="school-item">
+            <h2>{{ school.title }}</h2>
+
+            {% if school.media.images|length > 0 %}
+                {% set images = school.media.images %}
+                {% set image_count = images|length %}
+                
+                {% if image_count == 1 %}
+                    <!-- 1枚だけの場合 -->
+                    <div class="single-photo">
+                        <img src="{{ images|first.resize(400, null).url }}" alt="{{ school.title }}" class="school-image">
+                    </div>
+                {% elseif image_count == 2 %}
+                    <!-- 2枚の場合 -->
+                    <div class="two-photos">
+                        {% for image in images %}
+                            <div class="photo">
+                                <img src="{{ image.resize(400, null).url }}" alt="{{ school.title }}" class="school-image">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!-- 3枚以上の場合 -->
+                    <div class="owl-carousel">
+                        {% for image in images %}
+                            <div class="item">
+                                <img src="{{ image.resize(400, null).url }}" alt="{{ school.title }}" class="school-image">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+            
+            <!-- Features Table -->
+            <h6 class="exp-heading">{{ school.header.exp1 }}</h6>
+            <table class="features-table">
+                {% for feature in school.header.features %}
+                    <tr>
+                        <td>{{ feature }}</td>
+                        <td>{{ school.header.description[loop.index0] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            
+            <!-- Duration Table --> 
+            <h6 class="exp-heading">{{ school.header.exp2 }}</h6>
+            <table class="duration-table">
+                {% for duration in school.header.duration %}
+                    <tr>
+                       <td style="width: 100px;">{{ duration }}</td>
+                       <td>{{ school.header.cost1[loop.index0] }}</td>
+                       {% if school.header.cost2 is defined %}
+                           <td>{{ school.header.cost2[loop.index0] }}</td>
+                           {% if school.header.cost3 is defined %}
+                               <td>{{ school.header.cost3[loop.index0] }}</td>
+                               {% if school.header.cost4 is defined %}
+                                   <td>{{ school.header.cost4[loop.index0] }}</td>
+                               {% endif %}
+                           {% endif %}
+                       {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <h6>{{ school.header.exp3 }}</h6>
+            <label>※上記金額はホームステイ諸条件や為替によって変動することがあり概算となります</label><br>
+            
+            <a href="/home/estimate?title={{ school.title|url_encode }}" class="btn">詳細お見積り・お申込み</a>
+            
+        </div>
+    {% endfor %}
+    
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        $(".owl-carousel").owlCarousel({
+            items: 2,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            dots: true,
+        });
+    });
+</script>
+
+{% endblock %}
