@@ -88,17 +88,35 @@ textarea:focus {
 #header {
   position: fixed !important;
   z-index: 10000 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
 }
 
 #menu {
   z-index: 10001 !important;
 }
 
+/* Mobile menu toggle button */
 .navPanelToggle {
   z-index: 10002 !important;
   position: fixed !important;
   top: 1em !important;
   right: 1em !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure menu button is visible on mobile */
+@media screen and (max-width: 980px) {
+  .navPanelToggle {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid #2c5aa0 !important;
+  }
 }
 
 /* Ensure backgrounds stay behind content */

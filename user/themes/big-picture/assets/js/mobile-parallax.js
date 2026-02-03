@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // iOS Safari fix: use transform instead of background-attachment
                 section.style.position = 'relative';
-                section.style.overflow = 'hidden';
+                // Don't use overflow hidden to prevent menu cutoff
                 section.style.backgroundImage = 'none';
                 
                 // Create a pseudo-fixed background
