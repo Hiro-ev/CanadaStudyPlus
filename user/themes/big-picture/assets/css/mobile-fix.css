@@ -96,19 +96,20 @@ textarea:focus {
 
 .navPanelToggle {
   z-index: 10002 !important;
+  position: fixed !important;
+  top: 1em !important;
+  right: 1em !important;
 }
 
-/* Ensure parallax backgrounds stay behind content */
-.parallax-bg {
+/* Ensure backgrounds stay behind content */
+.mobile-bg-fix,
+.parallax-bg,
+.parallax-container {
   z-index: -1 !important;
 }
 
-/* Fix section content visibility */
-#toronto, #calgary, #vancouver, #montreal {
-  z-index: 1;
-}
-
-#toronto > *, #calgary > *, #vancouver > *, #montreal > * {
+/* Ensure section content is above backgrounds */
+section > *:not(.mobile-bg-fix):not(.parallax-bg):not(.parallax-container) {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }

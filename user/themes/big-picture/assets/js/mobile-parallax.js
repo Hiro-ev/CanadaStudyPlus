@@ -1,96 +1,78 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if mobile device
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
                      (window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
     
     if (!isMobile) return;
     
-    // Map section IDs to their complete image paths
-    const sectionBackgrounds = {
-        'why': '/user/pages/01.home/_why/one.jpg',
-        'toronto': '/user/pages/01.home/_toronto/two.jpg',
-        'calgary': '/user/pages/01.home/_calgary/three.jpg',
-        'vancouver': '/user/pages/01.home/_vancouver/four.jpg',
-        'montreal': '/user/pages/01.home/_montreal/five.jpg',
-        'aboutus': '/user/pages/01.home/_about-us/intro.jpg'
-    };
+    // Find all sections with backgrounds
+    const sections = document.querySelectorAll('section.info, section.intro');
     
-    // Process each section
-    Object.entries(sectionBackgrounds).forEach(([sectionId, imageUrl]) => {
-        const section = document.getElementById(sectionId);
-        if (!section) return;
+    sections.forEach(section => {
+        // Get the computed background image
+        const computedStyle = window.getComputedStyle(section);
+        const bgImage = computedStyle.backgroundImage;
         
-        // Apply fixed background effect
-        section.style.position = 'relative';
-        section.style.overflow = 'hidden';
-        
-        // Hide original background
-        section.style.backgroundImage = 'none';
-        
-        // Create fixed background element
-        const fixedBg = document.createElement('div');
-        fixedBg.className = 'mobile-fixed-bg';
-        fixedBg.dataset.section = sectionId;
-        fixedBg.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background-image: url('${imageUrl}');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            z-index: -2;
-            display: none;
-        `;
-        
-        // Add to body for proper fixed positioning
-        document.body.appendChild(fixedBg);
-        
-        // Mark section as processed
-        section.dataset.mobileParallax = 'true';
+        if (bgImage && bgImage !== 'none') {
+            // Extract all URLs from background-image
+            const urlMatches = bgImage.match(/url\(['"]?([^'"]+?)['"]?\)/g);
+            
+            if (urlMatches && urlMatches.length > 0) {
+                // Get the last URL (the actual image, not overlay)
+                const lastUrl = urlMatches[urlMatches.length - 1];
+                const imageUrl = lastUrl.match(/url\(['"]?([^'"]+?)['"]?\)/)[1];
+                
+                // Store original background for restoration if needed
+                section.dataset.originalBg = bgImage;
+                
+                // iOS Safari fix: use transform instead of background-attachment
+                section.style.position = 'relative';
+                section.style.overflow = 'hidden';
+                section.style.backgroundImage = 'none';
+                
+                // Create a pseudo-fixed background
+                const bgDiv = document.createElement('div');
+                bgDiv.className = 'mobile-bg-fix';
+                bgDiv.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-image: url('${imageUrl}');
+                    background-size: cover;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    will-change: transform;
+                    z-index: -1;
+                `;
+                
+                // Insert the background div
+                section.insertBefore(bgDiv, section.firstChild);
+                
+                // Store reference for parallax
+                section.dataset.hasParallaxBg = 'true';
+            }
+        }
     });
     
-    // Update visibility based on scroll
+    // Simple parallax effect on scroll
     let ticking = false;
-    let activeBg = null;
     
-    function updateBackgrounds() {
-        const viewportHeight = window.innerHeight;
+    function updateParallax() {
         const scrolled = window.pageYOffset;
         
-        // Find which section is most visible
-        let mostVisibleSection = null;
-        let maxVisibility = 0;
-        
-        document.querySelectorAll('[data-mobile-parallax="true"]').forEach(section => {
-            const rect = section.getBoundingClientRect();
+        document.querySelectorAll('[data-has-parallax-bg="true"]').forEach(section => {
+            const bgDiv = section.querySelector('.mobile-bg-fix');
+            if (!bgDiv) return;
             
-            // Calculate how much of the section is visible
-            if (rect.top < viewportHeight && rect.bottom > 0) {
-                const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-                const visibility = visibleHeight / viewportHeight;
-                
-                if (visibility > maxVisibility) {
-                    maxVisibility = visibility;
-                    mostVisibleSection = section;
-                }
-            }
-        });
-        
-        // Update background visibility
-        document.querySelectorAll('.mobile-fixed-bg').forEach(bg => {
-            if (mostVisibleSection && bg.dataset.section === mostVisibleSection.id) {
-                bg.style.display = 'block';
-                
-                // Add slight parallax effect
-                const rect = mostVisibleSection.getBoundingClientRect();
-                const scrollPercent = -rect.top / viewportHeight;
-                const parallaxSpeed = 0.2;
-                const yPos = scrollPercent * 50 * parallaxSpeed;
-                bg.style.transform = `translate3d(0, ${yPos}px, 0) scale(1.1)`;
-            } else {
-                bg.style.display = 'none';
+            const rect = section.getBoundingClientRect();
+            const speed = 0.5; // Parallax speed
+            
+            // Only apply parallax when section is in view
+            if (rect.bottom >= 0 && rect.top <= window.innerHeight) {
+                const yPos = -(rect.top * speed);
+                bgDiv.style.transform = `translateY(${yPos}px)`;
             }
         });
         
@@ -99,14 +81,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function requestTick() {
         if (!ticking) {
-            window.requestAnimationFrame(updateBackgrounds);
+            window.requestAnimationFrame(updateParallax);
             ticking = true;
         }
     }
     
+    // Add scroll listener
     window.addEventListener('scroll', requestTick, { passive: true });
-    window.addEventListener('resize', requestTick, { passive: true });
     
-    // Initial update
-    updateBackgrounds();
+    // Initial call
+    updateParallax();
 });
