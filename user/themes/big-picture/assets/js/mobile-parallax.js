@@ -4,42 +4,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!isMobile) return;
     
-    // Map section IDs to their background images
+    // Map section IDs to their complete image paths
     const sectionBackgrounds = {
-        'why': 'one.jpg',
-        'toronto': 'two.jpg',
-        'calgary': 'three.jpg',
-        'vancouver': 'four.jpg',
-        'montreal': 'five.jpg',
-        'aboutus': 'intro.jpg'
+        'why': '/user/pages/01.home/_why/one.jpg',
+        'toronto': '/user/pages/01.home/_toronto/two.jpg',
+        'calgary': '/user/pages/01.home/_calgary/three.jpg',
+        'vancouver': '/user/pages/01.home/_vancouver/four.jpg',
+        'montreal': '/user/pages/01.home/_montreal/five.jpg',
+        'aboutus': '/user/pages/01.home/_about-us/intro.jpg'
     };
     
     // Process each section
-    Object.entries(sectionBackgrounds).forEach(([sectionId, imageName]) => {
+    Object.entries(sectionBackgrounds).forEach(([sectionId, imageUrl]) => {
         const section = document.getElementById(sectionId);
         if (!section) return;
-        
-        // Extract the base URL from existing background if possible
-        const computedStyle = window.getComputedStyle(section);
-        const bgImage = computedStyle.backgroundImage;
-        let baseUrl = '/user/pages/01.home/';
-        
-        // Try to extract the actual path from current background
-        if (bgImage && bgImage !== 'none') {
-            const urlMatches = bgImage.match(/url\(['"]?([^'"]+?)['"]?\)/g);
-            if (urlMatches && urlMatches.length > 0) {
-                const lastUrl = urlMatches[urlMatches.length - 1];
-                const currentUrl = lastUrl.match(/url\(['"]?([^'"]+?)['"]?\)/)[1];
-                // Extract base path
-                const pathMatch = currentUrl.match(/(.+\/)([^/]+\.jpg)/);
-                if (pathMatch) {
-                    baseUrl = pathMatch[1];
-                }
-            }
-        }
-        
-        // Construct the image URL
-        const imageUrl = baseUrl + imageName;
         
         // Apply fixed background effect
         section.style.position = 'relative';
