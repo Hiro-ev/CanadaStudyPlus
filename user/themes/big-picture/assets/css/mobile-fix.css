@@ -32,3 +32,54 @@
     background-attachment: scroll !important;
   }
 }
+
+/* Contact Form Improvements */
+#contact {
+  padding-bottom: 3em !important; /* Add space before footer */
+}
+
+/* Form field visibility improvements */
+input[type="text"],
+input[type="password"], 
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+input[type="url"],
+select,
+textarea {
+  border-color: #2c5aa0 !important; /* More visible blue border */
+  color: #2d3748 !important; /* Darker text color */
+  background: rgba(255, 255, 255, 0.95) !important; /* Slightly more opaque background */
+}
+
+/* Placeholder text improvements */
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="search"]::placeholder,
+input[type="url"]::placeholder,
+textarea::placeholder {
+  color: #4a5568 !important; /* Darker placeholder text */
+  opacity: 0.7 !important; /* More visible than 0.375 */
+}
+
+/* Focus state improvements */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #1a365d !important; /* Darker blue on focus */
+  box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.2) !important;
+}
+
+/* Contact section background enhancement */
+#contact .box {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(26, 54, 93, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
