@@ -83,3 +83,32 @@ textarea:focus {
   border: 1px solid rgba(26, 54, 93, 0.1) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* Fix mobile menu visibility */
+#header {
+  position: fixed !important;
+  z-index: 10000 !important;
+}
+
+#menu {
+  z-index: 10001 !important;
+}
+
+.navPanelToggle {
+  z-index: 10002 !important;
+}
+
+/* Ensure parallax backgrounds stay behind content */
+.parallax-bg {
+  z-index: -1 !important;
+}
+
+/* Fix section content visibility */
+#toronto, #calgary, #vancouver, #montreal {
+  z-index: 1;
+}
+
+#toronto > *, #calgary > *, #vancouver > *, #montreal > * {
+  position: relative;
+  z-index: 2;
+}

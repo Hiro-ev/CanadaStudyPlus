@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         section.style.position = 'relative';
-        section.style.overflow = 'hidden';
         section.style.backgroundImage = 'none';
         
         const parallaxBg = document.createElement('div');
