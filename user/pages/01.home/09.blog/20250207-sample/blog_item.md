@@ -1,6 +1,8 @@
 ---
 title: 【サンプル】新しいブログシステムの使い方ガイド
 date: '2025-02-07 10:00'
+published: false
+visible: false
 before: '20250128'
 taxonomy:
     category:
