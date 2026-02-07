@@ -1,90 +1,316 @@
 {% extends 'partials/base.html.twig' %}
 
 {% block content %}
-<div class="blog-post" style="padding-left: 20px; background-color: #f0f0f0;">
-
+<div class="blog-post-container">
     <style>
-        h2 {
-            font-size: 2rem !important;
+        .blog-post-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .blog-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .blog-title {
+            font-size: 2.5rem !important;
             margin-bottom: 10px !important;
             color: #003366 !important;
-            display: inline; /* インライン表示 */
-            margin-right: 15px; /* タイトルと日付の間にスペース */
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
         }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
         .blog-date {
             font-size: 1rem !important;
-            color: #888 !important;
-            margin-bottom: 15px !important;
-            display: inline; /* インライン表示 */
+            color: #666 !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
+        .blog-date:before {
+            content: "📅";
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .blog-tag {
+            background-color: #f0f0f0;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .blog-tag:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Blog content styles */
         .blog-content {
-            font-size: 1.2rem !important;
-            line-height: 1.6 !important;
-            color: #555 !important;
+            font-size: 1.1rem !important;
+            line-height: 1.8 !important;
+            color: #333 !important;
         }
 
-        .next-post-link {
-            margin-top: 20px;
-            font-size: 1.2rem;
+        .blog-content h1 {
+            font-size: 2rem;
+            margin: 40px 0 20px 0;
+            color: #003366;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .blog-content h2 {
+            font-size: 1.7rem;
+            margin: 35px 0 15px 0;
             color: #003366;
         }
 
-        .image-wrapper {
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin: 30px 0 15px 0;
+            color: #003366;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* Inline images in markdown content */
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 30px auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Image alignment classes */
+        .blog-content img[alt*="left"] {
+            float: left;
+            margin: 10px 30px 20px 0;
+            max-width: 45%;
+        }
+
+        .blog-content img[alt*="right"] {
+            float: right;
+            margin: 10px 0 20px 30px;
+            max-width: 45%;
+        }
+
+        .blog-content img[alt*="small"] {
+            max-width: 50%;
+        }
+
+        .blog-content img[alt*="large"] {
+            max-width: 100%;
+            margin: 40px auto;
+        }
+
+        /* Figure and caption support */
+        .blog-content figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .blog-content figcaption {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Lists */
+        .blog-content ul, .blog-content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Blockquotes */
+        .blog-content blockquote {
+            border-left: 4px solid #003366;
+            padding-left: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Code blocks */
+        .blog-content pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .blog-content code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        /* Tables */
+        .blog-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .blog-content th, .blog-content td {
+            border: 1px solid #ddd;
+            padding: 12px;
             text-align: left;
         }
 
-        .two-images {
+        .blog-content th {
+            background-color: #f4f4f4;
+            font-weight: 600;
+        }
+
+        /* Links */
+        .blog-content a {
+            color: #0066cc;
+            text-decoration: none;
+            border-bottom: 1px dotted #0066cc;
+            transition: color 0.3s;
+        }
+
+        .blog-content a:hover {
+            color: #0052a3;
+            border-bottom-style: solid;
+        }
+
+        /* Navigation */
+        .blog-navigation {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
             display: flex;
-            justify-content: center;
-            gap: 10px; /* 画像間のスペース */
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .two-images img {
-            max-width: 48%; /* 2枚並べたときの幅 */
-            height: auto;
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #003366;
+            transition: background-color 0.3s;
         }
 
-        .owl-carousel .item img {
-            width: 100%;
-            height: auto;
+        .nav-link:hover {
+            background-color: #e0e0e0;
+        }
+
+        .nav-link.prev:before {
+            content: "←";
+        }
+
+        .nav-link.next:after {
+            content: "→";
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .blog-post-container {
+                padding: 20px 15px;
+            }
+
+            .blog-title {
+                font-size: 2rem !important;
+            }
+
+            .blog-content {
+                font-size: 1rem !important;
+            }
+
+            .blog-content img[alt*="left"],
+            .blog-content img[alt*="right"] {
+                float: none;
+                margin: 20px auto;
+                max-width: 100%;
+            }
+        }
+
+        /* Clear floats */
+        .blog-content::after {
+            content: "";
+            display: table;
+            clear: both;
         }
     </style>
 
-    <h2>{{ page.title }}</h2>
-    <p class="blog-date">{{ page.date|date('Y/m/d') }}</p>
-    
-    {% if page.media.images|length == 1 %}
-        <div class="image-wrapper">
-            {% for photo in page.media.images %}
-                <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
-            {% endfor %}
-        </div>
-    {% elseif page.media.images|length == 2 %}
-        <div class="two-images">
-            {% for photo in page.media.images %}
-                <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
-            {% endfor %}
-        </div>
-    {% elseif page.media.images|length > 2 %}
-        <div class="owl-carousel">
-            {% for photo in page.media.images %}
-                <div class="item">
-                    <img src="{{ photo.resize(500, null).url }}" alt="{{ page.title }}">
+    <article>
+        <header class="blog-header">
+            <h1 class="blog-title">{{ page.title }}</h1>
+            <div class="blog-meta">
+                <time class="blog-date" datetime="{{ page.date|date('Y-m-d') }}">
+                    {{ page.date|date('Y年m月d日') }}
+                </time>
+                {% if page.taxonomy.tags %}
+                <div class="blog-tags">
+                    {% for tag in page.taxonomy.tags %}
+                        <span class="blog-tag">#{{ tag }}</span>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="blog-content">
+            {{ page.content|raw }}
         </div>
-    {% endif %}
 
-    <div class="blog-content">
-        {{ page.content|raw }}
-    </div>
-
-    {% if page.header.before %}
-        <div class="next-post-link">
-            <a href="https://canadastudyplus.com/home/blog/{{ page.header.before }}">前の記事: {{ page.header.before }}</a>
-        </div>
-    {% endif %}
-
+        {% if page.header.before or page.header.after %}
+        <nav class="blog-navigation">
+            {% if page.header.before %}
+                <a href="{{ base_url }}/home/blog/{{ page.header.before }}" class="nav-link prev">
+                    前の記事
+                </a>
+            {% endif %}
+            {% if page.header.after %}
+                <a href="{{ base_url }}/home/blog/{{ page.header.after }}" class="nav-link next">
+                    次の記事
+                </a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </article>
 </div>
 {% endblock %}
