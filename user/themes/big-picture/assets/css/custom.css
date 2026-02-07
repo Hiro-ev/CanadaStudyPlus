@@ -1,6 +1,29 @@
 /*
 	Custom by Hiro
 */
+
+/* Japanese font optimization for better readability */
+body, input, textarea, select {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif !important;
+    font-weight: 400 !important;
+    font-feature-settings: "palt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif !important;
+    font-weight: 700 !important;
+}
+
+strong, b {
+    font-weight: 700 !important;
+}
+
+/* Ensure consistent rendering for blog content */
+.blog-post, .blog-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif !important;
+}
 .school-item {
     border: 2px solid black; /* 枠線の色と太さ */
     border-radius: 10px; /* 角を丸める（必要に応じて） */
