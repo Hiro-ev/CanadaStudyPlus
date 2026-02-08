@@ -1,7 +1,7 @@
 ---
 title: カナディアン・ロッキーの宝石「ジャスパー国立公園」へカルガリーから行ってみた
 date: '2025-09-02 10:00'
-before: '20250128'
+before: '20250713-stampede'
 taxonomy:
     category:
         - blog

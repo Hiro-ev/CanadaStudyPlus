@@ -2,6 +2,7 @@
 title: 新たな「2025年旅券」について
 date: '2025-01-28 00:00'
 before: '20250127'
+after: '20250713-stampede'
 taxonomy:
     category:
         - blog
