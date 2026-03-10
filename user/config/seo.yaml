@@ -9,8 +9,8 @@ structured_data:
   "@context": "https://schema.org"
   "@type": "EducationalOrganization"
   name: "Canada Study Plus"
-  url: "https://canadastudyplus.com"
-  logo: "https://canadastudyplus.com/images/logo.png"
+  url: "https://canadastudyplus.net"
+  logo: "https://canadastudyplus.net/images/logo.png"
   description: "カナダ留学経験者によるカナダに特化した留学・ワーホリをご提案"
   address:
     "@type": "PostalAddress"
@@ -18,5 +18,5 @@ structured_data:
   
 # Multi-language Support
 lang_alternate:
-  ja: "https://canadastudyplus.com"
-  en: "https://canadastudyplus.com/en"
+  ja: "https://canadastudyplus.net"
+  en: "https://canadastudyplus.net/en"

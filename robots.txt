@@ -21,4 +21,4 @@ Allow: *.js$
 Allow: /system/*.js$
 
 # Sitemap location
-Sitemap: https://canadastudyplus.com/sitemap.xml
+Sitemap: https://canadastudyplus.net/sitemap.xml
