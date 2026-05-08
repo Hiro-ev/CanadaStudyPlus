@@ -6,7 +6,7 @@ content:
     order:
         by: date
         dir: desc
-    limit: 5
+    limit: 20
     pagination: true
 sitemap:
     lastmod: '2025-01-25 19:20'
